@@ -1,0 +1,24 @@
+task main()
+{
+     SetSensorLowspeed(IN_4);
+     
+     while(SensorUS(IN_4)>60)
+     {
+                OnFwd(OUT_B, 35);
+                OnFwd(OUT_C, (-35));
+                until(SensorUS(IN_4)<60);
+                Off(OUT_BC);
+     }
+     while(true)
+     {
+     OnFwd(OUT_BC, 35);
+     until(SensorUS(IN_4)<100);
+     Off(OUT_BC);
+
+     OnFwd(OUT_B, 35);
+     OnFwd(OUT_C, -(35));
+     Wait(100);
+     Off(OUT_BC);
+     }
+     
+}
