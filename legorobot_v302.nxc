@@ -1,0 +1,55 @@
+#define MAXVOL 10
+#define MINVOL 1
+#define MIDVOL 5
+#define near 60
+
+mutex moveMutex;
+
+task findWall()
+{
+     Acquire(moveMutex);
+     
+     while(SensorUS(IN_4)>near)
+     {
+                OnFwd(OUT_B, 30);
+                OnRev(OUT_C, 30);
+                until(SensorUS(IN_4)<near);
+                Off(OUT_BC);
+     }
+     
+     Release(moveMutex);
+
+     Off(OUT_BC);
+}
+
+task driveToWall()
+{
+     Acquire(moveMutex);
+     OnFwd(OUT_BC, 30);
+     until(SensorUS(IN_4)<20);
+     Off(OUT_BC);
+     Release(moveMutex);
+}
+
+task faceWall()
+{
+
+}
+
+
+task main()
+{
+     int count;
+     /*Countdown*/
+     PlayFileEx("03.rso",MAXVOL,FALSE);
+     Wait(1000);
+     PlayFileEx("02.rso",MAXVOL,FALSE);
+     Wait(1000);
+     PlayFileEx("01.rso",MAXVOL,FALSE);
+     Wait(1000);
+     
+     SetSensorLowspeed(IN_4);
+
+     Precedes(findWall,driveToWall);
+
+}
